@@ -49,15 +49,30 @@ export default function ContactForm() {
       const response = await apiRequest("POST", "/api/leads", data);
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Show success message
       toast({
         title: "Thank you!",
         description: "We've received your inquiry and will contact you shortly.",
       });
+      
+      // Check if there was an email error but the lead was still stored
+      if (data.emailError) {
+        console.warn("Email notification issue:", data.emailError);
+        toast({
+          title: "Note",
+          description: "Your request was saved, but our notification system is experiencing delays. We'll still process your request.",
+          variant: "default",
+          duration: 6000,
+        });
+      }
+      
+      // Reset the form
       reset();
       setAgreed(false);
     },
     onError: (error) => {
+      // Show error message
       toast({
         title: "Something went wrong",
         description: error.message || "Please try again later.",
