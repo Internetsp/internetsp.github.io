@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { leadSchema } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { sendLeadNotification } from "./email";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Lead capture API endpoint
@@ -12,9 +13,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const leadData = leadSchema.parse(req.body);
       const lead = await storage.createLead(leadData);
       
+      // Attempt to send email notification
+      let emailSent = false;
+      
+      // Only attempt to send email if environment variables are set
+      if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
+        emailSent = await sendLeadNotification(lead);
+      } else {
+        console.warn('Email credentials not set. Skipping email notification.');
+      }
+      
       res.status(201).json({
         message: "Lead captured successfully",
-        lead
+        lead,
+        emailSent
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -24,6 +36,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           errors: validationError.toString()
         });
       } else {
+        console.error('Error processing lead:', error);
         res.status(500).json({
           message: "An error occurred while processing your request"
         });

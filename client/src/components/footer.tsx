@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <h3 className="text-xl font-bold mb-4">Premier<span className="text-[#F37B21]">Connect</span></h3>
+            <h3 className="text-xl font-bold mb-4">Internet<span className="text-[#F37B21]">sp</span></h3>
             <p className="mb-4 text-gray-400">Your local authorized AT&T retailer providing fiber internet and wireless services to the community.</p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition">
@@ -60,7 +60,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} PremierConnect. All rights reserved. Authorized AT&T retailer.
+              &copy; {new Date().getFullYear()} Internetserviceproviders (Internetsp). All rights reserved. Authorized AT&T retailer.
             </p>
             <p className="text-gray-400 text-sm text-center">
               AT&T and the AT&T logo are trademarks of AT&T Intellectual Property or AT&T affiliated companies.

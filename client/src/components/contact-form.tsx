@@ -93,7 +93,7 @@ export default function ContactForm() {
                 </p>
                 <p className="flex items-start">
                   <Mail className="text-[#009FDB] h-5 w-5 mt-1 mr-3" />
-                  <span>info@premierconnect.com</span>
+                  <span>omar.mteir@internetsp.net</span>
                 </p>
                 <p className="flex items-start">
                   <Clock className="text-[#009FDB] h-5 w-5 mt-1 mr-3" />

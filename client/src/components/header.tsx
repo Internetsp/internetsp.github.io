@@ -20,7 +20,7 @@ export default function Header() {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
             <Link href="/" className="text-3xl font-bold text-[#009FDB]">
-              Premier<span className="text-[#F37B21]">Connect</span>
+              Internet<span className="text-[#F37B21]">sp</span>
             </Link>
             <div className="ml-3 text-xs text-gray-600">Authorized AT&T Retailer</div>
           </div>
