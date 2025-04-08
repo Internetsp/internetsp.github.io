@@ -27,8 +27,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/health", (_req, res) => {
     res.status(200).json({ 
       status: "ok",
-      emailConfigured: !!(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD)
+      emailConfigured: !!(
+        (process.env.SENDGRID_API_KEY) || 
+        (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD)
+      )
     });
+  });
+  
+  // API to get all leads (admin access)
+  app.get("/api/leads", async (_req, res) => {
+    try {
+      const leads = await storage.getLeads();
+      res.status(200).json({ leads });
+    } catch (error) {
+      console.error('Error retrieving leads:', error);
+      res.status(500).json({
+        message: "An error occurred while retrieving leads"
+      });
+    }
   });
 
   // Lead capture API endpoint
@@ -37,15 +53,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate the lead data
       const leadData = leadSchema.parse(req.body);
       
-      // Store the lead in our database
+      // Store the lead in our database (the most important part)
       const lead = await storage.createLead(leadData);
       
-      // Attempt to send email notification
+      // Log the lead for admin access
+      console.log('New lead captured:', {
+        name: lead.name,
+        email: lead.email,
+        phone: lead.phone,
+        interest: lead.interest,
+        timestamp: lead.createdAt
+      });
+      
+      // Attempt to send email notification, but don't fail if it doesn't work
       let emailSent = false;
       let emailError = null;
       
-      // Only attempt to send email if environment variables are set
-      if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
+      // Check if email sending is possible (SendGrid or Gmail)
+      const canSendEmail = !!(
+        (process.env.SENDGRID_API_KEY) || 
+        (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD)
+      );
+      
+      if (canSendEmail) {
         try {
           await sendLeadNotification(lead);
           emailSent = true;
@@ -55,7 +85,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error('Failed to send email notification:', error);
         }
       } else {
-        console.warn('Email credentials not set. Skipping email notification.');
+        console.warn('Email service not configured. Skipping email notification.');
       }
       
       // Return success response to the client
