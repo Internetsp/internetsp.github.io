@@ -19,8 +19,8 @@ const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: n
 };
 
 const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number, byodPrice: number }> = {
-  'business-advanced': { marketPrice: 35, ourPrice: 25, byodPrice: 10 },
-  'business-premium': { marketPrice: 45, ourPrice: 35, byodPrice: 20 },
+  'business-advanced': { marketPrice: 90, ourPrice: 25, byodPrice: 10 },
+  'business-premium': { marketPrice: 80, ourPrice: 35, byodPrice: 20 },
 };
 
 // Format currency
