@@ -355,7 +355,7 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
                 <Label htmlFor="business-advanced" className="block cursor-pointer">
                   <div className="font-medium">AT&T Business Unlimited Advanced</div>
                   <div className="text-sm text-gray-600 mb-3">100GB mobile hotspot per line</div>
-                  <div className="text-[#0055CC] font-bold">${hasDevices ? phonePricing['business-advanced'].ourPrice : phonePricing['business-advanced'].byodPrice}/line</div>
+                  <div className="text-[#0055CC] font-bold">{hasDevices ? `$${phonePricing['business-advanced'].ourPrice}` : `As low as $${phonePricing['business-advanced'].byodPrice}`}/line</div>
                   <div className="text-xs text-gray-500 mt-1">{hasDevices ? "With device payment" : "With Bring Your Own Device"}</div>
                 </Label>
               </div>
@@ -369,7 +369,7 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
                 <Label htmlFor="business-premium" className="block cursor-pointer">
                   <div className="font-medium">AT&T Business Unlimited Premium</div>
                   <div className="text-sm text-gray-600 mb-3">200GB mobile hotspot per line</div>
-                  <div className="text-[#0055CC] font-bold">${hasDevices ? phonePricing['business-premium'].ourPrice : phonePricing['business-premium'].byodPrice}/line</div>
+                  <div className="text-[#0055CC] font-bold">{hasDevices ? `$${phonePricing['business-premium'].ourPrice}` : `As low as $${phonePricing['business-premium'].byodPrice}`}/line</div>
                   <div className="text-xs text-gray-500 mt-1">{hasDevices ? "With device payment" : "With Bring Your Own Device"}</div>
                 </Label>
               </div>

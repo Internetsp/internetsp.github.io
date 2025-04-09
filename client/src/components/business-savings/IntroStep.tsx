@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { Check, Smartphone, Wifi, Globe, Building2, BadgeDollarSign, Briefcase, BookCheck, WifiOff } from 'lucide-react';
 
 interface IntroStepProps {
   onContinue: () => void;
@@ -43,6 +43,26 @@ export function IntroStep({ onContinue }: IntroStepProps) {
           </ul>
         </div>
         
+        {/* Mobile Feature Grid (visible only on mobile) */}
+        <div className="md:hidden bg-gradient-to-br from-[#0055CC] to-[#003C8F] rounded-lg p-4 mb-6">
+          <h3 className="text-white text-xl font-bold mb-4">Business Tech Solutions</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 flex flex-col items-center text-center">
+              <div className="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                <Smartphone className="h-6 w-6 text-white" />
+              </div>
+              <h4 className="text-white font-semibold text-sm">Business Phones</h4>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 flex flex-col items-center text-center">
+              <div className="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                <Wifi className="h-6 w-6 text-white" />
+              </div>
+              <h4 className="text-white font-semibold text-sm">Fiber Internet</h4>
+            </div>
+          </div>
+        </div>
+        
         <Button 
           onClick={onContinue}
           size="lg"
@@ -52,37 +72,40 @@ export function IntroStep({ onContinue }: IntroStepProps) {
         </Button>
       </div>
       
-      {/* Right side - Image grid (placeholder for future images) */}
-      <div className="hidden md:block md:w-1/2 bg-[#0055CC] rounded-lg">
-        <div className="grid grid-cols-2 gap-4 p-4">
-          {/* These could be replaced with actual business-related images */}
-          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
-            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
-              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+      {/* Right side - Feature Grid (visible only on desktop) */}
+      <div className="hidden md:block md:w-1/2 bg-gradient-to-br from-[#0055CC] to-[#003C8F] rounded-lg p-6">
+        <h3 className="text-white text-2xl font-bold mb-6">Business Tech Solutions</h3>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <Smartphone className="h-8 w-8 text-white" />
             </div>
+            <h4 className="text-white font-semibold mb-2">Business Phone Lines</h4>
+            <p className="text-white/80 text-sm">Unlimited data with mobile hotspot capability</p>
           </div>
-          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
-            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
-              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <Wifi className="h-8 w-8 text-white" />
             </div>
+            <h4 className="text-white font-semibold mb-2">Fiber Internet</h4>
+            <p className="text-white/80 text-sm">Symmetrical speeds up to 5 Gbps</p>
           </div>
-          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
-            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
-              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <BadgeDollarSign className="h-8 w-8 text-white" />
             </div>
+            <h4 className="text-white font-semibold mb-2">Exclusive Savings</h4>
+            <p className="text-white/80 text-sm">Special pricing for business owners</p>
           </div>
-          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
-            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
-              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <Briefcase className="h-8 w-8 text-white" />
             </div>
+            <h4 className="text-white font-semibold mb-2">Business Support</h4>
+            <p className="text-white/80 text-sm">Dedicated business customer service</p>
           </div>
         </div>
       </div>
