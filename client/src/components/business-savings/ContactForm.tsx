@@ -51,7 +51,6 @@ const getPhoneDisplayName = (type?: PhoneLineOption): string => {
   if (!type) return 'None';
   
   const packageMap: Record<PhoneLineOption, string> = {
-    'business-standard': 'AT&T Business Unlimited Standard',
     'business-advanced': 'AT&T Business Unlimited Advanced',
     'business-premium': 'AT&T Business Unlimited Premium',
   };

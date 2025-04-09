@@ -19,9 +19,8 @@ const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: n
 };
 
 const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number, byodPrice: number }> = {
-  'business-standard': { marketPrice: 30, ourPrice: 25, byodPrice: 15 },
-  'business-advanced': { marketPrice: 35, ourPrice: 30, byodPrice: 20 },
-  'business-premium': { marketPrice: 45, ourPrice: 40, byodPrice: 30 },
+  'business-advanced': { marketPrice: 35, ourPrice: 25, byodPrice: 10 },
+  'business-premium': { marketPrice: 45, ourPrice: 35, byodPrice: 20 },
 };
 
 // Format currency
@@ -57,7 +56,7 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
   );
   
   const [phoneType, setPhoneType] = useState<PhoneLineOption>(
-    (formData.phonePackage?.type as PhoneLineOption) || 'business-standard'
+    (formData.phonePackage?.type as PhoneLineOption) || 'business-advanced'
   );
   
   const [phoneQuantity, setPhoneQuantity] = useState(
@@ -345,22 +344,8 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
             <RadioGroup 
               value={phoneType} 
               onValueChange={(value) => setPhoneType(value as PhoneLineOption)}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4"
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
             >
-              <div className={`border rounded-lg p-4 transition ${phoneType === 'business-standard' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
-                <RadioGroupItem 
-                  value="business-standard" 
-                  id="business-standard" 
-                  className="sr-only" 
-                />
-                <Label htmlFor="business-standard" className="block cursor-pointer">
-                  <div className="font-medium">AT&T Business Unlimited Standard</div>
-                  <div className="text-sm text-gray-600 mb-3">5GB mobile hotspot per line</div>
-                  <div className="text-[#0055CC] font-bold">${hasDevices ? phonePricing['business-standard'].ourPrice : phonePricing['business-standard'].byodPrice}/line</div>
-                  <div className="text-xs text-gray-500 mt-1">{hasDevices ? "With device payment" : "With Bring Your Own Device"}</div>
-                </Label>
-              </div>
-              
               <div className={`border rounded-lg p-4 transition ${phoneType === 'business-advanced' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
                 <RadioGroupItem 
                   value="business-advanced" 

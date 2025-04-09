@@ -7,7 +7,7 @@ import { QuoteSummary } from '../components/business-savings/QuoteSummary';
 
 // Define types for our form data
 export type InternetOption = 'copper' | 'internet-300' | 'internet-500' | 'internet-1000' | 'internet-2000' | 'internet-5000';
-export type PhoneLineOption = 'business-standard' | 'business-advanced' | 'business-premium';
+export type PhoneLineOption = 'business-advanced' | 'business-premium';
 
 export interface DevicePayoff {
   hasDevice: boolean;
