@@ -317,7 +317,7 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
           
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 border border-gray-200 rounded-lg">
-              <h4 className="text-sm font-medium text-gray-600 mb-2">Standard Market Rate</h4>
+              <h4 className="text-sm font-medium text-gray-600 mb-2">Standard AT&T Rate</h4>
               <p className="text-2xl font-bold">
                 {formatCurrency(internetPricing[internetType].marketPrice)}/mo
               </p>
@@ -439,7 +439,7 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
           
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 border border-gray-200 rounded-lg">
-              <h4 className="text-sm font-medium text-gray-600 mb-2">Standard Market Rate</h4>
+              <h4 className="text-sm font-medium text-gray-600 mb-2">Standard AT&T Rate</h4>
               <p className="text-2xl font-bold">
                 {formatCurrency(phonePricing[phoneType].marketPrice)}/mo
               </p>
