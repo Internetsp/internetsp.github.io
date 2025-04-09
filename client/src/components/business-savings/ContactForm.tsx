@@ -4,8 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -82,17 +83,9 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 2,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(amount);
-  };
-  
-  // Calculate device payoff amount if applicable
-  const calculateDevicePayoff = () => {
-    const devicePayoff = formData.phonePackage?.devicePayoff;
-    if (devicePayoff?.hasDevice && devicePayoff?.wantsPayoff) {
-      return devicePayoff.deviceCount * devicePayoff.balancePerDevice;
-    }
-    return 0;
   };
   
   // Handle form submission
@@ -103,51 +96,111 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
     });
   };
   
+  // Calculate monthly and annual savings
+  const calculateSavings = () => {
+    const annualSavings = formData.estimatedSavings || 0;
+    const monthlySavings = annualSavings / 12;
+    
+    return {
+      monthly: monthlySavings,
+      annual: annualSavings,
+      twoYear: annualSavings * 2
+    };
+  };
+  
+  const savings = calculateSavings();
+  
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-center text-blue-900">
-        Get Your Free Savings Quote
-      </h2>
+    <div className="space-y-8">
+      {/* Progress Steps */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-[#0055CC] text-white flex items-center justify-center font-bold">
+            1
+          </div>
+          <span className="text-xs mt-1 font-medium">Discover Savings</span>
+        </div>
+        <div className="h-0.5 flex-grow bg-gray-200 mx-2 relative">
+          <div className="absolute inset-y-0 left-0 bg-[#0055CC] w-full"></div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-[#0055CC] text-white flex items-center justify-center font-bold">
+            2
+          </div>
+          <span className="text-xs mt-1 font-medium">Calculate Savings</span>
+        </div>
+        <div className="h-0.5 flex-grow bg-gray-200 mx-2 relative">
+          <div className="absolute inset-y-0 left-0 bg-[#0055CC] w-full"></div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-[#0055CC] text-white flex items-center justify-center font-bold">
+            3
+          </div>
+          <span className="text-xs mt-1 font-medium">Get Your Quote</span>
+        </div>
+      </div>
+      
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-[#0055CC] mb-4">
+          Get Your Free Quote
+        </h2>
+        <p className="text-gray-600">
+          Complete the form below to receive your personalized savings quote. Our business specialists will contact you to discuss your custom plan.
+        </p>
+      </div>
       
       {/* Savings Summary */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-lg font-semibold mb-2 text-blue-900">Your Selected Package</h3>
+      <div className="bg-[#0055CC] text-white p-6 rounded-lg mb-8">
+        <h3 className="text-xl font-bold mb-4">Your Potential Savings Summary</h3>
         
-        <div className="space-y-2 mb-4">
-          {(formData.serviceType === 'internet' || formData.serviceType === 'both') && formData.internetPackage && (
-            <div className="flex justify-between">
-              <span>Internet:</span>
-              <span>{getInternetDisplayName(formData.internetPackage.type)} ({formData.internetPackage.quantity})</span>
+        <div className="grid grid-cols-2 gap-8 mb-6">
+          <div>
+            <h4 className="text-sm opacity-90 mb-1">Monthly</h4>
+            <div className="grid grid-cols-1 gap-1">
+              <div className="flex justify-between">
+                <span>Current Estimated Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.monthly + 80)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Your New Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.monthly - 80)}</span>
+              </div>
+              <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
+                <span>Monthly Savings:</span>
+                <span>{formatCurrency(80)}</span>
+              </div>
             </div>
-          )}
+          </div>
           
-          {(formData.serviceType === 'phone' || formData.serviceType === 'both') && formData.phonePackage && (
-            <div className="flex justify-between">
-              <span>Phone Lines:</span>
-              <span>{getPhoneDisplayName(formData.phonePackage.type)} ({formData.phonePackage.quantity})</span>
+          <div>
+            <h4 className="text-sm opacity-90 mb-1">Annual</h4>
+            <div className="grid grid-cols-1 gap-1">
+              <div className="flex justify-between">
+                <span>Current Estimated Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.annual + 960)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Your New Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.annual - 960)}</span>
+              </div>
+              <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
+                <span>Annual Savings:</span>
+                <span>{formatCurrency(960)}</span>
+              </div>
             </div>
-          )}
-          
-          {calculateDevicePayoff() > 0 && (
-            <div className="flex justify-between text-green-600">
-              <span>Device Payoff:</span>
-              <span>{formatCurrency(calculateDevicePayoff())}</span>
-            </div>
-          )}
+          </div>
         </div>
         
-        <div className="pt-2 border-t border-blue-200">
-          <div className="flex justify-between font-bold text-lg">
-            <span>Annual Savings:</span>
-            <span className="text-green-600">{formatCurrency(formData.estimatedSavings || 0)}</span>
-          </div>
+        <div className="flex justify-between font-bold text-lg pt-2 border-t border-white/20">
+          <span>Total 2-Year Savings:</span>
+          <span>{formatCurrency(1920)}</span>
         </div>
       </div>
       
       {/* Contact Form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="firstName"
@@ -155,7 +208,7 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" {...field} />
+                    <Input placeholder="John" {...field} className="h-12" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,7 +222,7 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Doe" {...field} />
+                    <Input placeholder="Doe" {...field} className="h-12" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -184,7 +237,7 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
               <FormItem>
                 <FormLabel>Business Address</FormLabel>
                 <FormControl>
-                  <Input placeholder="123 Main St, City, State, ZIP" {...field} />
+                  <Input placeholder="123 Main St, City, State, ZIP" {...field} className="h-12" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -195,24 +248,25 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
             control={form.control}
             name="hasLLC"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                <div className="space-y-0.5">
-                  <FormLabel>Do you have a registered LLC?</FormLabel>
-                  <FormDescription>
-                    This helps us determine eligibility for specific business plans
-                  </FormDescription>
-                </div>
+              <FormItem className="flex items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
-                  <Switch
+                  <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    className="border-[#0055CC] data-[state=checked]:bg-[#0055CC] mt-1"
                   />
                 </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Do you have a registered LLC?</FormLabel>
+                  <FormDescription>
+                    This helps us determine eligibility for additional business discounts
+                  </FormDescription>
+                </div>
               </FormItem>
             )}
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="phoneNumber"
@@ -220,7 +274,7 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="(555) 123-4567" {...field} />
+                    <Input placeholder="(555) 123-4567" {...field} className="h-12" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -234,7 +288,7 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
                 <FormItem>
                   <FormLabel>Email Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="your@email.com" {...field} />
+                    <Input placeholder="your@email.com" {...field} className="h-12" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -242,25 +296,33 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
             />
           </div>
           
-          <div className="flex justify-between pt-2">
+          <div className="flex justify-between pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={onBack}
               disabled={isSubmitting}
+              className="flex items-center h-12"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Button>
             
-            <Button type="submit" disabled={isSubmitting}>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="bg-[#FF7A00] hover:bg-[#E66C00] text-white h-12 px-6"
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Submitting...
                 </>
               ) : (
-                'Get Your Savings Quote'
+                <>
+                  Get Your Free Quote
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
               )}
             </Button>
           </div>

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Building2, DollarSign, Zap } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface IntroStepProps {
   onContinue: () => void;
@@ -7,61 +7,85 @@ interface IntroStepProps {
 
 export function IntroStep({ onContinue }: IntroStepProps) {
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-blue-900 mb-6">
-        Small Business Owners: Stop Overpaying!
-      </h1>
-      
-      <div className="bg-blue-50 p-6 rounded-lg mb-8 w-full max-w-2xl">
-        <p className="text-xl md:text-2xl font-semibold text-center text-blue-800 mb-4">
-          Save $1,000's Every Year on Phone Lines and Internet
+    <div className="flex flex-col md:flex-row">
+      {/* Left side content */}
+      <div className="md:w-1/2 pr-0 md:pr-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#0055CC] mb-4">
+          Small Business Owners: Stop Overpaying on Communication
+        </h1>
+        
+        <p className="text-lg mb-4">
+          You could be overpaying <span className="text-[#FF7A00] font-bold">$1,000's every year</span> on phone lines and fiber internet.
         </p>
         
-        <p className="text-lg text-center mb-4">
-          See if you qualify for unadvertised pricing for your business and family
-        </p>
+        <div className="bg-gray-50 p-6 rounded-lg mb-6">
+          <h2 className="text-xl font-bold mb-4">
+            See if you qualify for exclusive pricing:
+          </h2>
+          
+          <ul className="space-y-4">
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>Phone lines as low as <strong>$10/line</strong></span>
+            </li>
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>Let carriers <strong>pay off your devices</strong></span>
+            </li>
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>Free upgrades to <strong>fastest internet</strong> options</span>
+            </li>
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>Special pricing for <strong>both business and family</strong></span>
+            </li>
+          </ul>
+        </div>
         
-        <ul className="space-y-4 mb-6">
-          <li className="flex items-start">
-            <DollarSign className="h-6 w-6 text-green-600 mr-2 flex-shrink-0 mt-1" />
-            <span className="text-lg">Phone lines as low as <span className="font-bold">$10/line</span></span>
-          </li>
-          <li className="flex items-start">
-            <Zap className="h-6 w-6 text-blue-600 mr-2 flex-shrink-0 mt-1" />
-            <span className="text-lg">Get upgraded to the <span className="font-bold">fastest internet</span> at no extra cost</span>
-          </li>
-          <li className="flex items-start">
-            <Building2 className="h-6 w-6 text-orange-600 mr-2 flex-shrink-0 mt-1" />
-            <span className="text-lg">Let carriers <span className="font-bold">pay off your device balance</span> when you switch</span>
-          </li>
-        </ul>
+        <Button 
+          onClick={onContinue}
+          size="lg"
+          className="w-full bg-[#FF7A00] hover:bg-[#E66C00] text-white font-medium text-lg py-6"
+        >
+          Calculate My Savings →
+        </Button>
       </div>
       
-      <div className="text-center mb-6">
-        <p className="text-lg font-semibold mb-2">How it works:</p>
-        <ol className="text-left inline-block">
-          <li className="mb-2 flex items-center">
-            <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0">1</span>
-            <span>Use our calculator to see your potential savings</span>
-          </li>
-          <li className="mb-2 flex items-center">
-            <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0">2</span>
-            <span>Tell us about your business needs</span>
-          </li>
-          <li className="flex items-center">
-            <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0">3</span>
-            <span>Get a personalized savings quote</span>
-          </li>
-        </ol>
+      {/* Right side - Image grid (placeholder for future images) */}
+      <div className="hidden md:block md:w-1/2 bg-[#0055CC] rounded-lg">
+        <div className="grid grid-cols-2 gap-4 p-4">
+          {/* These could be replaced with actual business-related images */}
+          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
+            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
+            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
+            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+          <div className="bg-gray-100 rounded p-4 h-40 flex items-center justify-center text-gray-400">
+            <div className="border border-gray-300 w-16 h-16 rounded flex items-center justify-center">
+              <svg className="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <Button 
-        onClick={onContinue}
-        size="lg"
-        className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-10 py-6"
-      >
-        Start Saving Now
-      </Button>
     </div>
   );
 }

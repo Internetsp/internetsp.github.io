@@ -1,27 +1,27 @@
 import { useState, useEffect } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { CheckIcon, WifiIcon, PhoneIcon, NetworkIcon } from 'lucide-react';
+import { PlusIcon, MinusIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 import { BusinessSavingsFormData, InternetOption, PhoneLineOption, DevicePayoff } from '@/pages/BusinessSavings';
 
 // Pricing data
 const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: number }> = {
-  '10mb-copper': { marketPrice: 89.99, ourPrice: 49.99 },
-  '50mb-copper': { marketPrice: 119.99, ourPrice: 69.99 },
-  '300mb-fiber': { marketPrice: 149.99, ourPrice: 89.99 },
-  '1000mb-fiber': { marketPrice: 189.99, ourPrice: 99.99 },
-  '3000mb-fiber': { marketPrice: 299.99, ourPrice: 149.99 },
-  '5000mb-fiber': { marketPrice: 399.99, ourPrice: 199.99 },
+  '10mb-copper': { marketPrice: 89, ourPrice: 59 },
+  '50mb-copper': { marketPrice: 119, ourPrice: 79 },
+  '300mb-fiber': { marketPrice: 149, ourPrice: 89 },
+  '1000mb-fiber': { marketPrice: 189, ourPrice: 99 },
+  '3000mb-fiber': { marketPrice: 299, ourPrice: 149 },
+  '5000mb-fiber': { marketPrice: 399, ourPrice: 199 },
 };
 
 const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number }> = {
-  'personal-budget': { marketPrice: 45, ourPrice: 20 },
-  'personal-standard': { marketPrice: 65, ourPrice: 30 },
-  'personal-advanced': { marketPrice: 85, ourPrice: 40 },
+  'personal-budget': { marketPrice: 45, ourPrice: 10 },
+  'personal-standard': { marketPrice: 65, ourPrice: 20 },
+  'personal-advanced': { marketPrice: 85, ourPrice: 30 },
 };
 
 // Format currency
@@ -29,7 +29,8 @@ const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(amount);
 };
 
@@ -41,9 +42,11 @@ interface CalculatorProps {
 }
 
 export function Calculator({ formData, onUpdate, onContinue, onBack }: CalculatorProps) {
-  const [serviceType, setServiceType] = useState<'internet' | 'phone' | 'both'>(
-    formData.serviceType || 'both'
-  );
+  // Track selected services
+  const [selectedServices, setSelectedServices] = useState<{ internet: boolean; phone: boolean }>({
+    internet: formData.serviceType === 'internet' || formData.serviceType === 'both',
+    phone: formData.serviceType === 'phone' || formData.serviceType === 'both',
+  });
   
   const [internetType, setInternetType] = useState<InternetOption>(
     (formData.internetPackage?.type as InternetOption) || '300mb-fiber'
@@ -58,7 +61,11 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
   );
   
   const [phoneQuantity, setPhoneQuantity] = useState(
-    formData.phonePackage?.quantity || 1
+    formData.phonePackage?.quantity || 2
+  );
+  
+  const [hasDevices, setHasDevices] = useState(
+    formData.phonePackage?.devicePayoff?.hasDevice || false
   );
   
   const [devicePayoff, setDevicePayoff] = useState<DevicePayoff>(
@@ -67,177 +74,225 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
       wantsPayoff: false,
       carrier: '',
       deviceCount: 1,
-      balancePerDevice: 0
+      balancePerDevice: 300
     }
   );
   
   // Calculate savings based on current selections
-  const calculateSavings = (): number => {
+  const calculateSavings = () => {
     let totalMarketPrice = 0;
     let totalOurPrice = 0;
     
-    if (serviceType === 'internet' || serviceType === 'both') {
+    // Calculate Internet costs
+    if (selectedServices.internet) {
       totalMarketPrice += internetPricing[internetType].marketPrice * internetQuantity;
       totalOurPrice += internetPricing[internetType].ourPrice * internetQuantity;
     }
     
-    if (serviceType === 'phone' || serviceType === 'both') {
+    // Calculate Phone costs
+    if (selectedServices.phone) {
       totalMarketPrice += phonePricing[phoneType].marketPrice * phoneQuantity;
       totalOurPrice += phonePricing[phoneType].ourPrice * phoneQuantity;
-      
-      // Add potential device payoff savings
-      if (devicePayoff.hasDevice && devicePayoff.wantsPayoff) {
-        const payoffAmount = devicePayoff.deviceCount * devicePayoff.balancePerDevice;
-        totalMarketPrice += payoffAmount; // This would be an extra cost with other carriers
-      }
     }
     
-    // Calculate annual savings
-    return (totalMarketPrice - totalOurPrice) * 12;
+    // Monthly savings
+    const monthlySavings = totalMarketPrice - totalOurPrice;
+    
+    // Annual savings
+    const annualSavings = monthlySavings * 12;
+    
+    // Two-year savings
+    const twoYearSavings = annualSavings * 2;
+    
+    return {
+      currentCost: totalMarketPrice,
+      ourCost: totalOurPrice,
+      monthlySavings,
+      annualSavings,
+      twoYearSavings
+    };
   };
   
-  // Update savings whenever selections change
+  // Update service type when checkboxes change
+  const updateServiceType = () => {
+    let serviceType: 'internet' | 'phone' | 'both' = 'both';
+    
+    if (selectedServices.internet && !selectedServices.phone) {
+      serviceType = 'internet';
+    } else if (!selectedServices.internet && selectedServices.phone) {
+      serviceType = 'phone';
+    } else if (!selectedServices.internet && !selectedServices.phone) {
+      // Default to 'both' if nothing selected, but enable internet 
+      setSelectedServices({ internet: true, phone: false });
+      serviceType = 'internet';
+    }
+    
+    return serviceType;
+  };
+  
+  // Update form data when selections change
   useEffect(() => {
-    const estimatedSavings = calculateSavings();
+    const serviceType = updateServiceType();
+    const savings = calculateSavings();
+    
+    // Update device payoff
+    const updatedDevicePayoff: DevicePayoff = {
+      ...devicePayoff,
+      hasDevice: hasDevices,
+    };
     
     let updatedData: Partial<BusinessSavingsFormData> = {
       serviceType,
-      estimatedSavings,
+      estimatedSavings: savings.annualSavings,
     };
     
-    if (serviceType === 'internet' || serviceType === 'both') {
+    if (selectedServices.internet) {
       updatedData.internetPackage = {
         type: internetType,
         quantity: internetQuantity
       };
     }
     
-    if (serviceType === 'phone' || serviceType === 'both') {
+    if (selectedServices.phone) {
       updatedData.phonePackage = {
         type: phoneType,
         quantity: phoneQuantity,
-        devicePayoff
+        devicePayoff: updatedDevicePayoff
       };
     }
     
     onUpdate(updatedData);
   }, [
-    serviceType, 
+    selectedServices, 
     internetType, 
     internetQuantity, 
     phoneType, 
     phoneQuantity, 
+    hasDevices,
     devicePayoff
   ]);
   
   // Get display names
   const getInternetDisplayName = (type: InternetOption): string => {
     const speedMap: Record<InternetOption, string> = {
-      '10mb-copper': '10 Mbps Copper',
-      '50mb-copper': '50 Mbps Copper',
-      '300mb-fiber': '300 Mbps Fiber',
-      '1000mb-fiber': '1 Gbps Fiber',
-      '3000mb-fiber': '3 Gbps Fiber',
-      '5000mb-fiber': '5 Gbps Fiber',
+      '10mb-copper': '10mb Copper Internet',
+      '50mb-copper': '50mb Copper Internet',
+      '300mb-fiber': '300mb Fiber Internet',
+      '1000mb-fiber': '1000mb Fiber Internet',
+      '3000mb-fiber': '3000mb Fiber Internet',
+      '5000mb-fiber': '5000mb Fiber Internet',
     };
     return speedMap[type];
   };
   
-  const getPhoneDisplayName = (type: PhoneLineOption): string => {
-    const packageMap: Record<PhoneLineOption, string> = {
-      'personal-budget': 'Personal Budget',
-      'personal-standard': 'Personal Standard',
-      'personal-advanced': 'Personal Advanced',
-    };
-    return packageMap[type];
+  // Helper function to increment/decrement values
+  const adjustQuantity = (value: number, setter: (val: number) => void, min: number, max: number) => {
+    setter(Math.max(min, Math.min(max, value)));
   };
+  
+  const savings = calculateSavings();
   
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-center text-blue-900">
+      {/* Progress Steps */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-[#0055CC] text-white flex items-center justify-center font-bold">
+            1
+          </div>
+          <span className="text-xs mt-1 font-medium">Discover Savings</span>
+        </div>
+        <div className="h-0.5 flex-grow bg-gray-200 mx-2 relative">
+          <div className="absolute inset-y-0 left-0 bg-[#0055CC] w-full"></div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-[#0055CC] text-white flex items-center justify-center font-bold">
+            2
+          </div>
+          <span className="text-xs mt-1 font-medium">Calculate Savings</span>
+        </div>
+        <div className="h-0.5 flex-grow bg-gray-200 mx-2"></div>
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">
+            3
+          </div>
+          <span className="text-xs mt-1 font-medium text-gray-500">Get Your Quote</span>
+        </div>
+      </div>
+      
+      <h2 className="text-2xl font-bold text-[#0055CC]">
         Calculate Your Potential Savings
       </h2>
       
-      {/* Service Type Selection */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">What services are you interested in?</h3>
-        <RadioGroup
-          value={serviceType}
-          onValueChange={(value) => setServiceType(value as 'internet' | 'phone' | 'both')}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
-        >
-          <Label
-            htmlFor="internet"
-            className={`flex flex-col items-center justify-between rounded-md border-2 p-4 hover:bg-slate-100 cursor-pointer ${
-              serviceType === 'internet' ? 'border-blue-600 bg-blue-50' : 'border-slate-200'
-            }`}
-          >
-            <RadioGroupItem value="internet" id="internet" className="sr-only" />
-            <WifiIcon className="h-6 w-6 mb-2 text-blue-600" />
-            <span>Internet Only</span>
-          </Label>
-          
-          <Label
-            htmlFor="phone"
-            className={`flex flex-col items-center justify-between rounded-md border-2 p-4 hover:bg-slate-100 cursor-pointer ${
-              serviceType === 'phone' ? 'border-blue-600 bg-blue-50' : 'border-slate-200'
-            }`}
-          >
-            <RadioGroupItem value="phone" id="phone" className="sr-only" />
-            <PhoneIcon className="h-6 w-6 mb-2 text-blue-600" />
-            <span>Phone Lines Only</span>
-          </Label>
-          
-          <Label
-            htmlFor="both"
-            className={`flex flex-col items-center justify-between rounded-md border-2 p-4 hover:bg-slate-100 cursor-pointer ${
-              serviceType === 'both' ? 'border-blue-600 bg-blue-50' : 'border-slate-200'
-            }`}
-          >
-            <RadioGroupItem value="both" id="both" className="sr-only" />
-            <NetworkIcon className="h-6 w-6 mb-2 text-blue-600" />
-            <span>Both Services</span>
-          </Label>
-        </RadioGroup>
+      {/* Service Selection */}
+      <div className="mb-6">
+        <p className="mb-4">Select the services you're interested in:</p>
+        <div className="flex space-x-4">
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="internet-service" 
+              checked={selectedServices.internet}
+              onCheckedChange={(checked) => 
+                setSelectedServices(prev => ({ ...prev, internet: checked === true }))
+              }
+              className="border-[#0055CC] data-[state=checked]:bg-[#0055CC]"
+            />
+            <Label htmlFor="internet-service">Internet</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="phone-service" 
+              checked={selectedServices.phone}
+              onCheckedChange={(checked) => 
+                setSelectedServices(prev => ({ ...prev, phone: checked === true }))
+              }
+              className="border-[#0055CC] data-[state=checked]:bg-[#0055CC]"
+            />
+            <Label htmlFor="phone-service">Phone Lines</Label>
+          </div>
+        </div>
       </div>
       
       {/* Internet Options */}
-      {(serviceType === 'internet' || serviceType === 'both') && (
-        <div className="space-y-4 pt-2 border-t border-gray-200">
-          <h3 className="text-lg font-medium flex items-center">
-            <WifiIcon className="h-5 w-5 mr-2 text-blue-600" />
-            Internet Service Options
-          </h3>
+      {selectedServices.internet && (
+        <div className="bg-gray-50 p-6 rounded-lg mb-6">
+          <h3 className="text-xl font-bold mb-4">Internet Options</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="internet-type" className="block mb-2">
-                Select Internet Speed
-              </Label>
-              <Select 
-                value={internetType} 
-                onValueChange={(value) => setInternetType(value as InternetOption)}
+          <div className="mb-4">
+            <Label htmlFor="internet-type" className="block mb-2">
+              Select your desired internet package:
+            </Label>
+            <Select 
+              value={internetType} 
+              onValueChange={(value) => setInternetType(value as InternetOption)}
+            >
+              <SelectTrigger id="internet-type" className="w-full">
+                <SelectValue placeholder="Select Internet Package" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(internetPricing).map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {getInternetDisplayName(type as InternetOption)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="mb-6">
+            <Label htmlFor="internet-quantity" className="block mb-2">
+              How many internet connections do you need?
+            </Label>
+            <div className="flex items-center">
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="icon" 
+                onClick={() => adjustQuantity(internetQuantity - 1, setInternetQuantity, 1, 10)}
+                className="rounded-r-none border-r-0"
               >
-                <SelectTrigger id="internet-type">
-                  <SelectValue placeholder="Select Internet Speed" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.keys(internetPricing).map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {getInternetDisplayName(type as InternetOption)} - {formatCurrency(internetPricing[type as InternetOption].ourPrice)}/mo
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-sm text-gray-500 mt-1">
-                Market price: {formatCurrency(internetPricing[internetType].marketPrice)}/mo
-              </p>
-            </div>
-            
-            <div>
-              <Label htmlFor="internet-quantity" className="block mb-2">
-                Number of Internet Lines
-              </Label>
+                <MinusIcon className="h-4 w-4" />
+              </Button>
               <Input
                 id="internet-quantity"
                 type="number"
@@ -245,50 +300,106 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
                 max={10}
                 value={internetQuantity}
                 onChange={(e) => setInternetQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full"
+                className="w-16 text-center rounded-none border-x-0"
               />
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="icon" 
+                onClick={() => adjustQuantity(internetQuantity + 1, setInternetQuantity, 1, 10)}
+                className="rounded-l-none border-l-0"
+              >
+                <PlusIcon className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 border border-gray-200 rounded-lg">
+              <h4 className="text-sm font-medium text-gray-600 mb-2">Standard Market Rate</h4>
+              <p className="text-2xl font-bold">
+                {formatCurrency(internetPricing[internetType].marketPrice)}/mo
+              </p>
+            </div>
+            <div className="p-4 border border-[#0055CC] rounded-lg bg-blue-50">
+              <h4 className="text-sm font-medium text-[#0055CC] mb-2">Your Exclusive Rate</h4>
+              <p className="text-2xl font-bold text-[#0055CC]">
+                {formatCurrency(internetPricing[internetType].ourPrice)}/mo
+              </p>
             </div>
           </div>
         </div>
       )}
       
-      {/* Phone Options */}
-      {(serviceType === 'phone' || serviceType === 'both') && (
-        <div className="space-y-4 pt-2 border-t border-gray-200">
-          <h3 className="text-lg font-medium flex items-center">
-            <PhoneIcon className="h-5 w-5 mr-2 text-blue-600" />
-            Phone Line Options
-          </h3>
+      {/* Phone Line Options */}
+      {selectedServices.phone && (
+        <div className="bg-gray-50 p-6 rounded-lg mb-6">
+          <h3 className="text-xl font-bold mb-4">Phone Line Options</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="phone-type" className="block mb-2">
-                Select Phone Package
-              </Label>
-              <Select 
-                value={phoneType} 
-                onValueChange={(value) => setPhoneType(value as PhoneLineOption)}
+          <div className="mb-6">
+            <Label className="block mb-3">
+              Select your desired phone package:
+            </Label>
+            <RadioGroup 
+              value={phoneType} 
+              onValueChange={(value) => setPhoneType(value as PhoneLineOption)}
+              className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            >
+              <div className={`border rounded-lg p-4 transition ${phoneType === 'personal-budget' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
+                <RadioGroupItem 
+                  value="personal-budget" 
+                  id="personal-budget" 
+                  className="sr-only" 
+                />
+                <Label htmlFor="personal-budget" className="block cursor-pointer">
+                  <div className="font-medium">Personal Budget</div>
+                  <div className="text-sm text-gray-600 mb-4">Basic features for budget-conscious users</div>
+                  <div className="text-[#0055CC] font-bold">$10/line</div>
+                </Label>
+              </div>
+              
+              <div className={`border rounded-lg p-4 transition ${phoneType === 'personal-standard' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
+                <RadioGroupItem 
+                  value="personal-standard" 
+                  id="personal-standard" 
+                  className="sr-only" 
+                />
+                <Label htmlFor="personal-standard" className="block cursor-pointer">
+                  <div className="font-medium">Personal Standard</div>
+                  <div className="text-sm text-gray-600 mb-4">Standard features for everyday use</div>
+                  <div className="text-[#0055CC] font-bold">$20/line</div>
+                </Label>
+              </div>
+              
+              <div className={`border rounded-lg p-4 transition ${phoneType === 'personal-advanced' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
+                <RadioGroupItem 
+                  value="personal-advanced" 
+                  id="personal-advanced" 
+                  className="sr-only" 
+                />
+                <Label htmlFor="personal-advanced" className="block cursor-pointer">
+                  <div className="font-medium">Personal Advanced</div>
+                  <div className="text-sm text-gray-600 mb-4">Premium features for power users</div>
+                  <div className="text-[#0055CC] font-bold">$30/line</div>
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+          
+          <div className="mb-6">
+            <Label htmlFor="phone-quantity" className="block mb-2">
+              How many phone lines do you need?
+            </Label>
+            <div className="flex items-center">
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="icon" 
+                onClick={() => adjustQuantity(phoneQuantity - 1, setPhoneQuantity, 1, 20)}
+                className="rounded-r-none border-r-0"
               >
-                <SelectTrigger id="phone-type">
-                  <SelectValue placeholder="Select Phone Package" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.keys(phonePricing).map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {getPhoneDisplayName(type as PhoneLineOption)} - {formatCurrency(phonePricing[type as PhoneLineOption].ourPrice)}/mo
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-sm text-gray-500 mt-1">
-                Market price: {formatCurrency(phonePricing[phoneType].marketPrice)}/mo
-              </p>
-            </div>
-            
-            <div>
-              <Label htmlFor="phone-quantity" className="block mb-2">
-                Number of Phone Lines
-              </Label>
+                <MinusIcon className="h-4 w-4" />
+              </Button>
               <Input
                 id="phone-quantity"
                 type="number"
@@ -296,134 +407,133 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
                 max={20}
                 value={phoneQuantity}
                 onChange={(e) => setPhoneQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full"
+                className="w-16 text-center rounded-none border-x-0"
               />
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="icon" 
+                onClick={() => adjustQuantity(phoneQuantity + 1, setPhoneQuantity, 1, 20)}
+                className="rounded-l-none border-l-0"
+              >
+                <PlusIcon className="h-4 w-4" />
+              </Button>
             </div>
           </div>
           
-          {/* Device Payoff Section */}
-          <div className="bg-gray-50 p-4 rounded-md space-y-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="has-device" className="font-medium">
-                Do you currently have a device with another carrier?
-              </Label>
-              <Switch
-                id="has-device"
-                checked={devicePayoff.hasDevice}
-                onCheckedChange={(checked) => 
-                  setDevicePayoff(prev => ({ ...prev, hasDevice: checked }))
-                }
-              />
+          <div className="mb-6">
+            <p className="mb-3">Do you currently have devices you'd like paid off?</p>
+            <RadioGroup
+              value={hasDevices ? "yes" : "no"}
+              onValueChange={(value) => setHasDevices(value === "yes")}
+              className="flex space-x-4"
+            >
+              <div className="flex items-center">
+                <RadioGroupItem 
+                  value="yes" 
+                  id="device-yes" 
+                  className="text-[#0055CC] border-[#0055CC]"
+                />
+                <Label htmlFor="device-yes" className="ml-2">Yes</Label>
+              </div>
+              <div className="flex items-center">
+                <RadioGroupItem 
+                  value="no" 
+                  id="device-no" 
+                  className="text-[#0055CC] border-[#0055CC]"
+                />
+                <Label htmlFor="device-no" className="ml-2">No</Label>
+              </div>
+            </RadioGroup>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 border border-gray-200 rounded-lg">
+              <h4 className="text-sm font-medium text-gray-600 mb-2">Standard Market Rate</h4>
+              <p className="text-2xl font-bold">
+                {formatCurrency(phonePricing[phoneType].marketPrice)}/mo
+              </p>
+              <p className="text-xs text-gray-500">Monthly per line</p>
             </div>
-            
-            {devicePayoff.hasDevice && (
-              <>
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="wants-payoff" className="font-medium">
-                    Would you like your device paid off when you switch?
-                  </Label>
-                  <Switch
-                    id="wants-payoff"
-                    checked={devicePayoff.wantsPayoff}
-                    onCheckedChange={(checked) => 
-                      setDevicePayoff(prev => ({ ...prev, wantsPayoff: checked }))
-                    }
-                  />
-                </div>
-                
-                {devicePayoff.wantsPayoff && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label htmlFor="carrier" className="block mb-2">
-                        Current Carrier
-                      </Label>
-                      <Select
-                        value={devicePayoff.carrier}
-                        onValueChange={(value) => 
-                          setDevicePayoff(prev => ({ ...prev, carrier: value }))
-                        }
-                      >
-                        <SelectTrigger id="carrier">
-                          <SelectValue placeholder="Select Carrier" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="att">AT&T</SelectItem>
-                          <SelectItem value="verizon">Verizon</SelectItem>
-                          <SelectItem value="tmobile">T-Mobile</SelectItem>
-                          <SelectItem value="sprint">Sprint</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="device-count" className="block mb-2">
-                        Number of Devices
-                      </Label>
-                      <Input
-                        id="device-count"
-                        type="number"
-                        min={1}
-                        max={10}
-                        value={devicePayoff.deviceCount}
-                        onChange={(e) => 
-                          setDevicePayoff(prev => ({ 
-                            ...prev, 
-                            deviceCount: Math.max(1, parseInt(e.target.value) || 1) 
-                          }))
-                        }
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="balance-per-device" className="block mb-2">
-                        Balance per Device
-                      </Label>
-                      <Input
-                        id="balance-per-device"
-                        type="number"
-                        min={0}
-                        value={devicePayoff.balancePerDevice}
-                        onChange={(e) => 
-                          setDevicePayoff(prev => ({ 
-                            ...prev, 
-                            balancePerDevice: Math.max(0, parseFloat(e.target.value) || 0) 
-                          }))
-                        }
-                        placeholder="e.g. 350"
-                      />
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
+            <div className="p-4 border border-[#0055CC] rounded-lg bg-blue-50">
+              <h4 className="text-sm font-medium text-[#0055CC] mb-2">Your Exclusive Rate</h4>
+              <p className="text-2xl font-bold text-[#0055CC]">
+                {formatCurrency(phonePricing[phoneType].ourPrice)}/mo
+              </p>
+              <p className="text-xs text-[#0055CC]">Monthly per line</p>
+            </div>
           </div>
         </div>
       )}
       
-      {/* Savings Preview */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-        <h3 className="text-xl font-bold text-blue-900 mb-2">Your Estimated Annual Savings</h3>
-        <p className="text-3xl font-bold text-green-600">
-          {formatCurrency(calculateSavings())}
-        </p>
-        <p className="text-sm text-gray-600 mt-2">
-          Based on your selections compared to market rates
-        </p>
-      </div>
+      {/* Savings Summary */}
+      {(selectedServices.internet || selectedServices.phone) && (
+        <div className="bg-[#0055CC] text-white p-6 rounded-lg mb-6">
+          <h3 className="text-xl font-bold mb-4">Your Potential Savings Summary</h3>
+          
+          <div className="grid grid-cols-2 gap-8 mb-6">
+            <div>
+              <h4 className="text-sm opacity-90 mb-1">Monthly</h4>
+              <div className="grid grid-cols-1 gap-1">
+                <div className="flex justify-between">
+                  <span>Current Estimated Cost:</span>
+                  <span className="font-semibold">{formatCurrency(savings.currentCost)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Your New Cost:</span>
+                  <span className="font-semibold">{formatCurrency(savings.ourCost)}</span>
+                </div>
+                <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
+                  <span>Monthly Savings:</span>
+                  <span>{formatCurrency(savings.monthlySavings)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="text-sm opacity-90 mb-1">Annual</h4>
+              <div className="grid grid-cols-1 gap-1">
+                <div className="flex justify-between">
+                  <span>Current Estimated Cost:</span>
+                  <span className="font-semibold">{formatCurrency(savings.currentCost * 12)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Your New Cost:</span>
+                  <span className="font-semibold">{formatCurrency(savings.ourCost * 12)}</span>
+                </div>
+                <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
+                  <span>Annual Savings:</span>
+                  <span>{formatCurrency(savings.annualSavings)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-between font-bold text-lg pt-2 border-t border-white/20">
+            <span>Total 2-Year Savings:</span>
+            <span>{formatCurrency(savings.twoYearSavings)}</span>
+          </div>
+        </div>
+      )}
       
       {/* Navigation Buttons */}
-      <div className="flex justify-between pt-4">
+      <div className="flex justify-between">
         <Button
           variant="outline"
           onClick={onBack}
+          className="flex items-center"
         >
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
         
-        <Button onClick={onContinue}>
-          Continue to Get Your Quote
-          <CheckIcon className="ml-2 h-4 w-4" />
+        <Button 
+          onClick={onContinue}
+          className="bg-[#FF7A00] hover:bg-[#E66C00] text-white"
+          disabled={!selectedServices.internet && !selectedServices.phone}
+        >
+          Get Your Free Quote
+          <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
     </div>

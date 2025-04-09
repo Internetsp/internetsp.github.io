@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Calculator } from '@/components/business-savings/Calculator';
 import { IntroStep } from '@/components/business-savings/IntroStep';
 import { ContactForm } from '@/components/business-savings/ContactForm';
@@ -51,11 +49,8 @@ export default function BusinessSavings() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   
-  const totalSteps = 3;
-  const progress = (currentStep / totalSteps) * 100;
-  
   const handleNextStep = () => {
-    if (currentStep < totalSteps) {
+    if (currentStep < 3) {
       setCurrentStep(prevStep => prevStep + 1);
       window.scrollTo(0, 0);
     }
@@ -103,20 +98,11 @@ export default function BusinessSavings() {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          {/* Progress bar */}
-          <div className="mb-8">
-            <div className="flex justify-between text-sm font-medium mb-2">
-              <span>Step {currentStep} of {totalSteps}</span>
-              <span>{Math.round(progress)}%</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-          
-          <Card className="shadow-lg">
-            <CardContent className="p-6">
+          <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+            <CardContent className="p-8">
               {currentStep === 1 && (
                 <IntroStep onContinue={handleNextStep} />
               )}
@@ -144,28 +130,6 @@ export default function BusinessSavings() {
               )}
             </CardContent>
           </Card>
-          
-          {/* Navigation buttons for mobile */}
-          <div className="mt-6 flex justify-between md:hidden">
-            {currentStep > 1 && currentStep < 4 && (
-              <Button
-                variant="outline"
-                onClick={handlePrevStep}
-                disabled={isSubmitting}
-              >
-                Back
-              </Button>
-            )}
-            
-            {currentStep < 3 && (
-              <Button
-                onClick={handleNextStep}
-                className="ml-auto"
-              >
-                Continue
-              </Button>
-            )}
-          </div>
         </div>
       </div>
     </div>
