@@ -29,7 +29,15 @@ export interface BusinessSavingsFormData {
     quantity: number;
     devicePayoff: DevicePayoff;
   };
-  estimatedSavings: number;
+  
+  // Savings data - detailed breakdown from calculator
+  estimatedSavings: number; // Annual savings amount
+  currentMonthlyCost?: number; 
+  newMonthlyCost?: number;
+  monthlySavings?: number;
+  currentAnnualCost?: number;
+  newAnnualCost?: number;
+  twoYearSavings?: number;
   
   // Step 3 - Contact data
   firstName: string;

@@ -43,34 +43,25 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
     return packageMap[type];
   };
   
-  // Calculate savings
-  const calculateSavings = () => {
-    // In the calculator component, monthlySavings = currentCost - ourCost
-    // and annualSavings = monthlySavings * 12
-    // So here we need to derive those values from the estimatedSavings (which is annual)
-    
+  // Use savings values directly from the formData
+  const getSavingsData = () => {
+    // Use the data passed from the Calculator or fallback to calculated values
+    // for backward compatibility
     const annualSavings = data.estimatedSavings || 0;
-    const monthlySavings = Math.round(annualSavings / 12);
-    
-    // For QuoteSummary we'll assume the current cost is double our cost
-    // as that aligns with the calculation method in the image samples
-    const currentMonthlyCost = monthlySavings * 2;
-    const ourMonthlyCost = monthlySavings;
-    
-    const twoYearSavings = annualSavings * 2;
+    const monthlySavings = data.monthlySavings || Math.round(annualSavings / 12);
     
     return {
-      currentMonthly: currentMonthlyCost,
-      ourMonthly: ourMonthlyCost,
+      currentMonthly: data.currentMonthlyCost || monthlySavings * 2,
+      ourMonthly: data.newMonthlyCost || monthlySavings,
       monthly: monthlySavings,
-      currentAnnual: currentMonthlyCost * 12,
-      ourAnnual: ourMonthlyCost * 12,
+      currentAnnual: data.currentAnnualCost || (monthlySavings * 2 * 12),
+      ourAnnual: data.newAnnualCost || (monthlySavings * 12),
       annual: annualSavings,
-      twoYear: twoYearSavings
+      twoYear: data.twoYearSavings || (annualSavings * 2)
     };
   };
   
-  const savings = calculateSavings();
+  const savings = getSavingsData();
   
   return (
     <div className="space-y-8">

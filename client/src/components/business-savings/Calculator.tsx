@@ -10,6 +10,7 @@ import { BusinessSavingsFormData, InternetOption, PhoneLineOption, DevicePayoff 
 
 // Pricing data based on AT&T current pricing document
 const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: number }> = {
+  'copper': { marketPrice: 60, ourPrice: 45 }, // Copper (768Kbps - 100Mbps)
   'internet-300': { marketPrice: 70, ourPrice: 30 }, // Internet 300 (Fiber 300)
   'internet-500': { marketPrice: 110, ourPrice: 70 }, // Internet 500 (Fiber 500)
   'internet-1000': { marketPrice: 160, ourPrice: 120 }, // Internet 1000 (Fiber 1 GIG)
@@ -143,7 +144,14 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
     
     let updatedData: Partial<BusinessSavingsFormData> = {
       serviceType,
+      // Store all savings details for consistency in the summary page
       estimatedSavings: savings.annualSavings,
+      currentMonthlyCost: savings.currentCost,
+      newMonthlyCost: savings.ourCost,
+      monthlySavings: savings.monthlySavings,
+      currentAnnualCost: savings.currentCost * 12,
+      newAnnualCost: savings.ourCost * 12,
+      twoYearSavings: savings.twoYearSavings,
     };
     
     if (selectedServices.internet) {
