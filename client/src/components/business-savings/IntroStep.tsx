@@ -1,5 +1,15 @@
-import { Button } from '@/components/ui/button';
-import { Check, Smartphone, Wifi, BadgeDollarSign, Briefcase, ChevronRight } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import {
+  Check,
+  Smartphone,
+  Wifi,
+  Globe,
+  Building2,
+  BadgeDollarSign,
+  Briefcase,
+  BookCheck,
+  WifiOff,
+} from "lucide-react";
 
 interface IntroStepProps {
   onContinue: () => void;
@@ -7,144 +17,143 @@ interface IntroStepProps {
 
 export function IntroStep({ onContinue }: IntroStepProps) {
   return (
-    <div className="max-w-6xl mx-auto">
-      {/* Progress Steps */}
-      <div className="flex items-center justify-center mb-12">
-        <div className="flex items-center justify-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-[#0055CC] text-white flex items-center justify-center font-semibold text-sm">1</div>
-          <span className="text-sm font-medium">Discover</span>
+    <div className="flex flex-col md:flex-row">
+      {/* Left side content */}
+      <div className="md:w-1/2 pr-0 md:pr-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#0055CC] mb-4">
+          Small Business Owners: Save Up To 70% On Communication Costs
+        </h1>
+
+        <p className="text-lg mb-4">
+          Unlock unadvertised offers and enjoy premium communication at{" "}
+          <span className="text-[#FF7A00] font-bold">
+            a fraction of the cost
+          </span>
+          .
+        </p>
+
+        <div className="bg-gray-50 p-6 rounded-lg mb-6">
+          <h2 className="text-xl font-bold mb-4">
+            See if you qualify for exclusive pricing:
+          </h2>
+
+          <ul className="space-y-4">
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>
+                Business phone lines as low as <strong>$10/line</strong>
+              </span>
+            </li>
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>
+                Let carriers <strong>pay off your devices</strong>
+              </span>
+            </li>
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>
+                Free upgrades to <strong>fiber internet</strong> options
+              </span>
+            </li>
+            <li className="flex items-center">
+              <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
+              <span>
+                Special pricing for{" "}
+                <strong>both your business and family</strong>
+              </span>
+            </li>
+          </ul>
         </div>
-        <div className="h-0.5 w-12 bg-gray-200 mx-2"></div>
-        <div className="flex items-center justify-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-semibold text-sm">2</div>
-          <span className="text-sm font-medium text-gray-400">Calculate</span>
-        </div>
-        <div className="h-0.5 w-12 bg-gray-200 mx-2"></div>
-        <div className="flex items-center justify-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-semibold text-sm">3</div>
-          <span className="text-sm font-medium text-gray-400">Get Quote</span>
-        </div>
-      </div>
-      
-      {/* Main Content */}
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Left Column */}
-        <div className="md:w-1/2">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-[#0055CC] mb-3">
-              Save Up To 70% On Business Communications
-            </h1>
-            
-            <p className="text-gray-600 mb-6">
-              While competitors struggle with hidden fees, you'll get premium service at <span className="text-[#FF7A00] font-semibold">a fraction of the cost</span>.
-            </p>
-            
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start">
-                <div className="mt-1 bg-blue-50 rounded-full p-1 mr-3">
-                  <Check className="h-4 w-4 text-[#0055CC]" />
-                </div>
-                <div>
-                  <p className="font-medium">Business phone lines from $10/line</p>
-                  <p className="text-sm text-gray-500">Unlimited data with mobile hotspot</p>
-                </div>
+
+        {/* Mobile Feature Grid (visible only on mobile) */}
+        <div className="md:hidden bg-gradient-to-br from-[#0055CC] to-[#003C8F] rounded-lg p-4 mb-6">
+          <h3 className="text-white text-xl font-bold mb-4">
+            Business Tech Solutions
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 flex flex-col items-center text-center">
+              <div className="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                <Smartphone className="h-6 w-6 text-white" />
               </div>
-              
-              <div className="flex items-start">
-                <div className="mt-1 bg-blue-50 rounded-full p-1 mr-3">
-                  <Check className="h-4 w-4 text-[#0055CC]" />
-                </div>
-                <div>
-                  <p className="font-medium">Device payoffs up to $1,000/line</p>
-                  <p className="text-sm text-gray-500">Let carriers pay to switch your service</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start">
-                <div className="mt-1 bg-blue-50 rounded-full p-1 mr-3">
-                  <Check className="h-4 w-4 text-[#0055CC]" />
-                </div>
-                <div>
-                  <p className="font-medium">Fiber internet starting at $30/mo</p>
-                  <p className="text-sm text-gray-500">Symmetrical speeds with 99.9% reliability</p>
-                </div>
-              </div>
+              <h4 className="text-white font-semibold text-sm">
+                Business Phones
+              </h4>
             </div>
-            
-            <Button 
-              onClick={onContinue}
-              size="lg"
-              className="w-full bg-gradient-to-r from-[#FF7A00] to-[#E66C00] hover:from-[#E66C00] hover:to-[#D25C00] text-white font-semibold py-6 rounded-lg transition-all"
-            >
-              <span>See My Custom Savings Plan</span>
-              <ChevronRight className="h-5 w-5 ml-2" />
-            </Button>
-            <p className="text-center text-sm text-gray-500 mt-2">Free analysis, no obligation (takes just 2 minutes)</p>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 flex flex-col items-center text-center">
+              <div className="bg-white/20 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                <Wifi className="h-6 w-6 text-white" />
+              </div>
+              <h4 className="text-white font-semibold text-sm">
+                Fiber Internet
+              </h4>
+            </div>
           </div>
         </div>
-        
-        {/* Right Column */}
-        <div className="md:w-1/2">
-          <div className="bg-gradient-to-br from-[#0055CC] to-[#003C8F] rounded-xl shadow-lg overflow-hidden">
-            <div className="p-8">
-              <h3 className="text-white text-xl font-bold mb-2">Business Tech Solutions</h3>
-              <p className="text-white/80 text-sm mb-6">Premium business services at exclusive rates</p>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="flex items-center mb-3">
-                    <div className="bg-white/20 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                      <Smartphone className="h-5 w-5 text-white" />
-                    </div>
-                    <h4 className="text-white font-medium text-sm">Business Phone Lines</h4>
-                  </div>
-                  <p className="text-white/80 text-xs">Never worry about data caps with included mobile hotspot capability</p>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="flex items-center mb-3">
-                    <div className="bg-white/20 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                      <Wifi className="h-5 w-5 text-white" />
-                    </div>
-                    <h4 className="text-white font-medium text-sm">Fiber Internet</h4>
-                  </div>
-                  <p className="text-white/80 text-xs">Lightning-fast symmetrical speeds with reliability guarantee</p>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="flex items-center mb-3">
-                    <div className="bg-white/20 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                      <BadgeDollarSign className="h-5 w-5 text-white" />
-                    </div>
-                    <h4 className="text-white font-medium text-sm">Exclusive Savings</h4>
-                  </div>
-                  <p className="text-white/80 text-xs">Save up to 70% with our exclusive business packages</p>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="flex items-center mb-3">
-                    <div className="bg-white/20 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                      <Briefcase className="h-5 w-5 text-white" />
-                    </div>
-                    <h4 className="text-white font-medium text-sm">Business Support</h4>
-                  </div>
-                  <p className="text-white/80 text-xs">Priority access to specialized business tech advisors</p>
-                </div>
-              </div>
+
+        <Button
+          onClick={onContinue}
+          size="lg"
+          className="w-full bg-gradient-to-br from-[#FF7A00] to-[#E66C00] hover:from-[#E66C00] hover:to-[#D25C00] text-white font-bold text-lg py-6 shadow-md"
+        >
+          See My Custom Savings Plan →
+        </Button>
+        <p className="text-center text-sm text-gray-500 mt-2">
+          Free analysis, no obligation (takes just 2 minutes)
+        </p>
+      </div>
+
+      {/* Right side - Feature Grid (visible only on desktop) */}
+      <div className="hidden md:block md:w-1/2 bg-gradient-to-br from-[#0055CC] to-[#003C8F] rounded-lg p-6">
+        <h3 className="text-white text-2xl font-bold mb-6">
+          Business Tech Solutions
+        </h3>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <Smartphone className="h-8 w-8 text-white" />
             </div>
-            
-            <div className="bg-[#003071] p-6">
-              <div className="flex items-center">
-                <div>
-                  <p className="text-white/80 text-xs uppercase">Average 2-year savings</p>
-                  <p className="text-white text-2xl font-bold">$3,600+</p>
-                </div>
-                <div className="ml-auto flex items-center">
-                  <span className="text-white/80 text-sm mr-2">Ready to see your savings?</span>
-                  <ChevronRight className="h-5 w-5 text-white/60" />
-                </div>
-              </div>
+            <h4 className="text-white font-semibold mb-2">
+              Business Phone Lines
+            </h4>
+            <p className="text-white/80 text-sm">
+              Never worry about data caps again + included mobile hotspot keeps
+              you connected anywhere
+            </p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <Wifi className="h-8 w-8 text-white" />
             </div>
+            <h4 className="text-white font-semibold mb-2">Fiber Internet</h4>
+            <p className="text-white/80 text-sm">
+              Lightning-fast symmetrical speeds (same up/down) with 99.9%
+              reliability guarantee
+            </p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <BadgeDollarSign className="h-8 w-8 text-white" />
+            </div>
+            <h4 className="text-white font-semibold mb-2">Exclusive Savings</h4>
+            <p className="text-white/80 text-sm">
+              Save up to 70% off standard rates with our exclusive small
+              business packages
+            </p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
+            <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <Briefcase className="h-8 w-8 text-white" />
+            </div>
+            <h4 className="text-white font-semibold mb-2">Business Support</h4>
+            <p className="text-white/80 text-sm">
+              Priority support with direct access to specialized business tech
+              advisors
+            </p>
           </div>
         </div>
       </div>
