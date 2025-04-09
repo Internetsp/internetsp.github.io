@@ -18,10 +18,10 @@ const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: n
   'internet-5000': { marketPrice: 265, ourPrice: 245 }, // Internet 5000 (Fiber 5 GIG)
 };
 
-const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number }> = {
-  'personal-budget': { marketPrice: 45, ourPrice: 10 },
-  'personal-standard': { marketPrice: 65, ourPrice: 20 },
-  'personal-advanced': { marketPrice: 85, ourPrice: 30 },
+const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number, byodPrice: number }> = {
+  'business-standard': { marketPrice: 30, ourPrice: 25, byodPrice: 15 },
+  'business-advanced': { marketPrice: 35, ourPrice: 30, byodPrice: 20 },
+  'business-premium': { marketPrice: 45, ourPrice: 40, byodPrice: 30 },
 };
 
 // Format currency
@@ -57,7 +57,7 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
   );
   
   const [phoneType, setPhoneType] = useState<PhoneLineOption>(
-    (formData.phonePackage?.type as PhoneLineOption) || 'personal-standard'
+    (formData.phonePackage?.type as PhoneLineOption) || 'business-standard'
   );
   
   const [phoneQuantity, setPhoneQuantity] = useState(
@@ -92,7 +92,9 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
     // Calculate Phone costs
     if (selectedServices.phone) {
       totalMarketPrice += phonePricing[phoneType].marketPrice * phoneQuantity;
-      totalOurPrice += phonePricing[phoneType].ourPrice * phoneQuantity;
+      // Use BYOD pricing if the user has no devices to pay off
+      const pricePerLine = hasDevices ? phonePricing[phoneType].ourPrice : phonePricing[phoneType].byodPrice;
+      totalOurPrice += pricePerLine * phoneQuantity;
     }
     
     // Monthly savings
@@ -345,42 +347,45 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
               onValueChange={(value) => setPhoneType(value as PhoneLineOption)}
               className="grid grid-cols-1 md:grid-cols-3 gap-4"
             >
-              <div className={`border rounded-lg p-4 transition ${phoneType === 'personal-budget' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
+              <div className={`border rounded-lg p-4 transition ${phoneType === 'business-standard' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
                 <RadioGroupItem 
-                  value="personal-budget" 
-                  id="personal-budget" 
+                  value="business-standard" 
+                  id="business-standard" 
                   className="sr-only" 
                 />
-                <Label htmlFor="personal-budget" className="block cursor-pointer">
-                  <div className="font-medium">Personal Budget</div>
-                  <div className="text-sm text-gray-600 mb-4">Basic features for budget-conscious users</div>
-                  <div className="text-[#0055CC] font-bold">$10/line</div>
+                <Label htmlFor="business-standard" className="block cursor-pointer">
+                  <div className="font-medium">AT&T Business Unlimited Standard</div>
+                  <div className="text-sm text-gray-600 mb-3">5GB mobile hotspot per line</div>
+                  <div className="text-[#0055CC] font-bold">${hasDevices ? phonePricing['business-standard'].ourPrice : phonePricing['business-standard'].byodPrice}/line</div>
+                  <div className="text-xs text-gray-500 mt-1">{hasDevices ? "With device payment" : "With Bring Your Own Device"}</div>
                 </Label>
               </div>
               
-              <div className={`border rounded-lg p-4 transition ${phoneType === 'personal-standard' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
+              <div className={`border rounded-lg p-4 transition ${phoneType === 'business-advanced' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
                 <RadioGroupItem 
-                  value="personal-standard" 
-                  id="personal-standard" 
+                  value="business-advanced" 
+                  id="business-advanced" 
                   className="sr-only" 
                 />
-                <Label htmlFor="personal-standard" className="block cursor-pointer">
-                  <div className="font-medium">Personal Standard</div>
-                  <div className="text-sm text-gray-600 mb-4">Standard features for everyday use</div>
-                  <div className="text-[#0055CC] font-bold">$20/line</div>
+                <Label htmlFor="business-advanced" className="block cursor-pointer">
+                  <div className="font-medium">AT&T Business Unlimited Advanced</div>
+                  <div className="text-sm text-gray-600 mb-3">100GB mobile hotspot per line</div>
+                  <div className="text-[#0055CC] font-bold">${hasDevices ? phonePricing['business-advanced'].ourPrice : phonePricing['business-advanced'].byodPrice}/line</div>
+                  <div className="text-xs text-gray-500 mt-1">{hasDevices ? "With device payment" : "With Bring Your Own Device"}</div>
                 </Label>
               </div>
               
-              <div className={`border rounded-lg p-4 transition ${phoneType === 'personal-advanced' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
+              <div className={`border rounded-lg p-4 transition ${phoneType === 'business-premium' ? 'border-[#0055CC] bg-blue-50' : 'border-gray-200'}`}>
                 <RadioGroupItem 
-                  value="personal-advanced" 
-                  id="personal-advanced" 
+                  value="business-premium" 
+                  id="business-premium" 
                   className="sr-only" 
                 />
-                <Label htmlFor="personal-advanced" className="block cursor-pointer">
-                  <div className="font-medium">Personal Advanced</div>
-                  <div className="text-sm text-gray-600 mb-4">Premium features for power users</div>
-                  <div className="text-[#0055CC] font-bold">$30/line</div>
+                <Label htmlFor="business-premium" className="block cursor-pointer">
+                  <div className="font-medium">AT&T Business Unlimited Premium</div>
+                  <div className="text-sm text-gray-600 mb-3">200GB mobile hotspot per line</div>
+                  <div className="text-[#0055CC] font-bold">${hasDevices ? phonePricing['business-premium'].ourPrice : phonePricing['business-premium'].byodPrice}/line</div>
+                  <div className="text-xs text-gray-500 mt-1">{hasDevices ? "With device payment" : "With Bring Your Own Device"}</div>
                 </Label>
               </div>
             </RadioGroup>
@@ -458,9 +463,12 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
             <div className="p-4 border border-[#0055CC] rounded-lg bg-blue-50">
               <h4 className="text-sm font-medium text-[#0055CC] mb-2">Your Exclusive Rate</h4>
               <p className="text-2xl font-bold text-[#0055CC]">
-                {formatCurrency(phonePricing[phoneType].ourPrice)}/mo
+                {formatCurrency(hasDevices ? phonePricing[phoneType].ourPrice : phonePricing[phoneType].byodPrice)}/mo
               </p>
               <p className="text-xs text-[#0055CC]">Monthly per line</p>
+              <p className="text-xs text-[#0055CC] mt-1">
+                {hasDevices ? "With device payment" : "With Bring Your Own Device"}
+              </p>
             </div>
           </div>
         </div>

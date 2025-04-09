@@ -37,9 +37,9 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
     if (!type) return 'None';
     
     const packageMap: Record<PhoneLineOption, string> = {
-      'personal-budget': 'Personal Budget',
-      'personal-standard': 'Personal Standard',
-      'personal-advanced': 'Personal Advanced',
+      'business-standard': 'AT&T Business Unlimited Standard',
+      'business-advanced': 'AT&T Business Unlimited Advanced',
+      'business-premium': 'AT&T Business Unlimited Premium',
     };
     return packageMap[type];
   };
