@@ -31,6 +31,7 @@ export default function Header() {
             <a href="#fiber" className="font-medium text-gray-800 hover:text-[#009FDB] transition">Fiber Internet</a>
             <a href="#wireless" className="font-medium text-gray-800 hover:text-[#009FDB] transition">Wireless Plans</a>
             <a href="#coverage" className="font-medium text-gray-800 hover:text-[#009FDB] transition">Coverage</a>
+            <Link href="/business-savings" className="font-medium text-[#F37B21] hover:text-[#E36A10] transition">Business Savings</Link>
             <a href="#contact" className="font-medium text-gray-800 hover:text-[#009FDB] transition">Contact Us</a>
           </nav>
           
@@ -84,6 +85,13 @@ export default function Header() {
               >
                 Coverage
               </a>
+              <Link 
+                href="/business-savings" 
+                className="block font-medium text-[#F37B21] hover:text-[#E36A10] transition"
+                onClick={closeMobileMenu}
+              >
+                Business Savings
+              </Link>
               <a 
                 href="#contact" 
                 className="block font-medium text-gray-800 hover:text-[#009FDB] transition"
