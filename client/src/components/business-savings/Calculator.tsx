@@ -412,10 +412,10 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
           </div>
           
           <div className="mb-6">
-            <p className="mb-3">Do you currently have devices you'd like paid off?</p>
+            <p className="mb-3">Would you like to bring your own device?</p>
             <RadioGroup
-              value={hasDevices ? "yes" : "no"}
-              onValueChange={(value) => setHasDevices(value === "yes")}
+              value={!hasDevices ? "yes" : "no"}
+              onValueChange={(value) => setHasDevices(value === "no")}
               className="flex space-x-4"
             >
               <div className="flex items-center">
