@@ -11,11 +11,11 @@ export function IntroStep({ onContinue }: IntroStepProps) {
       {/* Left side content */}
       <div className="md:w-1/2 pr-0 md:pr-6">
         <h1 className="text-3xl md:text-4xl font-bold text-[#0055CC] mb-4">
-          Small Business Owners: Stop Overpaying on Communication
+          Small Business Owners: Save Up To 70% On Communication Costs
         </h1>
         
         <p className="text-lg mb-4">
-          You could be overpaying <span className="text-[#FF7A00] font-bold">$1,000's every year</span> on phone lines and fiber internet.
+          While your competitors struggle with unreliable service and hidden fees, you'll enjoy premium communication at <span className="text-[#FF7A00] font-bold">a fraction of the cost</span>.
         </p>
         
         <div className="bg-gray-50 p-6 rounded-lg mb-6">
@@ -66,10 +66,11 @@ export function IntroStep({ onContinue }: IntroStepProps) {
         <Button 
           onClick={onContinue}
           size="lg"
-          className="w-full bg-[#FF7A00] hover:bg-[#E66C00] text-white font-medium text-lg py-6"
+          className="w-full bg-gradient-to-br from-[#FF7A00] to-[#E66C00] hover:from-[#E66C00] hover:to-[#D25C00] text-white font-bold text-lg py-6 shadow-md"
         >
-          Calculate My Savings →
+          See My Custom Savings Plan →
         </Button>
+        <p className="text-center text-sm text-gray-500 mt-2">Free analysis, no obligation (takes just 2 minutes)</p>
       </div>
       
       {/* Right side - Feature Grid (visible only on desktop) */}
@@ -81,7 +82,7 @@ export function IntroStep({ onContinue }: IntroStepProps) {
               <Smartphone className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-white font-semibold mb-2">Business Phone Lines</h4>
-            <p className="text-white/80 text-sm">Unlimited data with mobile hotspot capability</p>
+            <p className="text-white/80 text-sm">Never worry about data caps again + included mobile hotspot keeps you connected anywhere</p>
           </div>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
@@ -89,7 +90,7 @@ export function IntroStep({ onContinue }: IntroStepProps) {
               <Wifi className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-white font-semibold mb-2">Fiber Internet</h4>
-            <p className="text-white/80 text-sm">Symmetrical speeds up to 5 Gbps</p>
+            <p className="text-white/80 text-sm">Lightning-fast symmetrical speeds (same up/down) with 99.9% reliability guarantee</p>
           </div>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
@@ -97,7 +98,7 @@ export function IntroStep({ onContinue }: IntroStepProps) {
               <BadgeDollarSign className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-white font-semibold mb-2">Exclusive Savings</h4>
-            <p className="text-white/80 text-sm">Special pricing for business owners</p>
+            <p className="text-white/80 text-sm">Save up to 70% off standard rates with our exclusive small business packages</p>
           </div>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
@@ -105,7 +106,7 @@ export function IntroStep({ onContinue }: IntroStepProps) {
               <Briefcase className="h-8 w-8 text-white" />
             </div>
             <h4 className="text-white font-semibold mb-2">Business Support</h4>
-            <p className="text-white/80 text-sm">Dedicated business customer service</p>
+            <p className="text-white/80 text-sm">Priority support with direct access to specialized business tech advisors</p>
           </div>
         </div>
       </div>
