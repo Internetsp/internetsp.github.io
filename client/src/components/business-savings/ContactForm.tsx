@@ -95,19 +95,12 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
     });
   };
   
-  // Calculate monthly and annual savings
-  const calculateSavings = () => {
-    const annualSavings = formData.estimatedSavings || 0;
-    const monthlySavings = annualSavings / 12;
-    
-    return {
-      monthly: monthlySavings,
-      annual: annualSavings,
-      twoYear: annualSavings * 2
-    };
+  // Determine monthly, annual, and 2-year savings
+  const savings = {
+    monthly: (formData.estimatedSavings || 0) / 12,
+    annual: formData.estimatedSavings || 0,
+    twoYear: (formData.estimatedSavings || 0) * 2
   };
-  
-  const savings = calculateSavings();
   
   return (
     <div className="space-y-8">
@@ -158,15 +151,15 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
             <div className="grid grid-cols-1 gap-1">
               <div className="flex justify-between">
                 <span>Current Estimated Cost:</span>
-                <span className="font-semibold">{formatCurrency(savings.monthly + 80)}</span>
+                <span className="font-semibold">{formatCurrency(savings.monthly * 2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Your New Cost:</span>
-                <span className="font-semibold">{formatCurrency(savings.monthly - 80)}</span>
+                <span className="font-semibold">{formatCurrency(savings.monthly)}</span>
               </div>
               <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
                 <span>Monthly Savings:</span>
-                <span>{formatCurrency(80)}</span>
+                <span>{formatCurrency(savings.monthly)}</span>
               </div>
             </div>
           </div>
@@ -176,15 +169,15 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
             <div className="grid grid-cols-1 gap-1">
               <div className="flex justify-between">
                 <span>Current Estimated Cost:</span>
-                <span className="font-semibold">{formatCurrency(savings.annual + 960)}</span>
+                <span className="font-semibold">{formatCurrency(savings.annual * 2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Your New Cost:</span>
-                <span className="font-semibold">{formatCurrency(savings.annual - 960)}</span>
+                <span className="font-semibold">{formatCurrency(savings.annual)}</span>
               </div>
               <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
                 <span>Annual Savings:</span>
-                <span>{formatCurrency(960)}</span>
+                <span>{formatCurrency(savings.annual)}</span>
               </div>
             </div>
           </div>
@@ -192,7 +185,7 @@ export function ContactForm({ formData, isSubmitting, onSubmit, onBack }: Contac
         
         <div className="flex justify-between font-bold text-lg pt-2 border-t border-white/20">
           <span>Total 2-Year Savings:</span>
-          <span>{formatCurrency(1920)}</span>
+          <span>{formatCurrency(savings.twoYear)}</span>
         </div>
       </div>
       
