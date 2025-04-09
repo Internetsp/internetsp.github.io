@@ -45,14 +45,26 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
   
   // Calculate savings
   const calculateSavings = () => {
-    // Use the estimated savings from data, with a reasonable fallback
+    // In the calculator component, monthlySavings = currentCost - ourCost
+    // and annualSavings = monthlySavings * 12
+    // So here we need to derive those values from the estimatedSavings (which is annual)
+    
     const annualSavings = data.estimatedSavings || 0;
     const monthlySavings = Math.round(annualSavings / 12);
+    
+    // For QuoteSummary we'll assume the current cost is double our cost
+    // as that aligns with the calculation method in the image samples
+    const currentMonthlyCost = monthlySavings * 2;
+    const ourMonthlyCost = monthlySavings;
+    
     const twoYearSavings = annualSavings * 2;
     
-    // Create structure matching the Calculator component return values
     return {
+      currentMonthly: currentMonthlyCost,
+      ourMonthly: ourMonthlyCost,
       monthly: monthlySavings,
+      currentAnnual: currentMonthlyCost * 12,
+      ourAnnual: ourMonthlyCost * 12,
       annual: annualSavings,
       twoYear: twoYearSavings
     };
@@ -113,12 +125,12 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
             <h4 className="text-sm opacity-90 mb-1">Monthly</h4>
             <div className="grid grid-cols-1 gap-1">
               <div className="flex justify-between">
-                <span>Monthly Cost Before:</span>
-                <span className="font-semibold">{formatCurrency(savings.monthly * 2)}</span>
+                <span>Current Estimated Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.currentMonthly)}</span>
               </div>
               <div className="flex justify-between">
-                <span>Monthly Cost After:</span>
-                <span className="font-semibold">{formatCurrency(savings.monthly)}</span>
+                <span>Your New Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.ourMonthly)}</span>
               </div>
               <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
                 <span>Monthly Savings:</span>
@@ -131,12 +143,12 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
             <h4 className="text-sm opacity-90 mb-1">Annual</h4>
             <div className="grid grid-cols-1 gap-1">
               <div className="flex justify-between">
-                <span>Annual Cost Before:</span>
-                <span className="font-semibold">{formatCurrency(savings.annual * 2)}</span>
+                <span>Current Estimated Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.currentAnnual)}</span>
               </div>
               <div className="flex justify-between">
-                <span>Annual Cost After:</span>
-                <span className="font-semibold">{formatCurrency(savings.annual)}</span>
+                <span>Your New Cost:</span>
+                <span className="font-semibold">{formatCurrency(savings.ourAnnual)}</span>
               </div>
               <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
                 <span>Annual Savings:</span>
