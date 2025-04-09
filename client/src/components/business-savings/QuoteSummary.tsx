@@ -45,10 +45,12 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
   
   // Calculate savings
   const calculateSavings = () => {
-    const annualSavings = data.estimatedSavings || 960;
+    // Use the estimated savings from data, with a reasonable fallback
+    const annualSavings = data.estimatedSavings || 0;
     const monthlySavings = Math.round(annualSavings / 12);
     const twoYearSavings = annualSavings * 2;
     
+    // Create structure matching the Calculator component return values
     return {
       monthly: monthlySavings,
       annual: annualSavings,
@@ -111,11 +113,11 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
             <h4 className="text-sm opacity-90 mb-1">Monthly</h4>
             <div className="grid grid-cols-1 gap-1">
               <div className="flex justify-between">
-                <span>Current Estimated Cost:</span>
+                <span>Monthly Cost Before:</span>
                 <span className="font-semibold">{formatCurrency(savings.monthly * 2)}</span>
               </div>
               <div className="flex justify-between">
-                <span>Your New Cost:</span>
+                <span>Monthly Cost After:</span>
                 <span className="font-semibold">{formatCurrency(savings.monthly)}</span>
               </div>
               <div className="flex justify-between pt-1 border-t border-white/20 font-bold">
@@ -129,11 +131,11 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
             <h4 className="text-sm opacity-90 mb-1">Annual</h4>
             <div className="grid grid-cols-1 gap-1">
               <div className="flex justify-between">
-                <span>Current Estimated Cost:</span>
+                <span>Annual Cost Before:</span>
                 <span className="font-semibold">{formatCurrency(savings.annual * 2)}</span>
               </div>
               <div className="flex justify-between">
-                <span>Your New Cost:</span>
+                <span>Annual Cost After:</span>
                 <span className="font-semibold">{formatCurrency(savings.annual)}</span>
               </div>
               <div className="flex justify-between pt-1 border-t border-white/20 font-bold">

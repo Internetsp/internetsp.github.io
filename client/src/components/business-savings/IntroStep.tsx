@@ -134,17 +134,15 @@ export function IntroStep({ onContinue }: IntroStepProps) {
             </div>
             
             <div className="bg-[#003071] p-6">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center">
                 <div>
                   <p className="text-white/80 text-xs uppercase">Average 2-year savings</p>
                   <p className="text-white text-2xl font-bold">$3,600+</p>
                 </div>
-                <Button 
-                  onClick={onContinue}
-                  className="bg-white text-[#0055CC] hover:bg-blue-50"
-                >
-                  Calculate Now
-                </Button>
+                <div className="ml-auto flex items-center">
+                  <span className="text-white/80 text-sm mr-2">Ready to see your savings?</span>
+                  <ChevronRight className="h-5 w-5 text-white/60" />
+                </div>
               </div>
             </div>
           </div>
