@@ -8,14 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { PlusIcon, MinusIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 import { BusinessSavingsFormData, InternetOption, PhoneLineOption, DevicePayoff } from '@/pages/BusinessSavings';
 
-// Pricing data
+// Pricing data based on AT&T current pricing
 const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: number }> = {
-  '10mb-copper': { marketPrice: 89, ourPrice: 59 },
-  '50mb-copper': { marketPrice: 119, ourPrice: 79 },
-  '300mb-fiber': { marketPrice: 149, ourPrice: 89 },
-  '1000mb-fiber': { marketPrice: 189, ourPrice: 99 },
-  '3000mb-fiber': { marketPrice: 299, ourPrice: 149 },
-  '5000mb-fiber': { marketPrice: 399, ourPrice: 199 },
+  '10mb-copper': { marketPrice: 80, ourPrice: 60 }, // Copper plan (averaged)
+  '50mb-copper': { marketPrice: 90, ourPrice: 60 }, // Copper plan
+  '300mb-fiber': { marketPrice: 75, ourPrice: 55 }, // Internet 300 (Fiber 300)
+  '1000mb-fiber': { marketPrice: 100, ourPrice: 80 }, // Internet 1000 (Fiber 1 GIG)
+  '3000mb-fiber': { marketPrice: 165, ourPrice: 145 }, // Internet 2000 (Fiber 2 GIG)
+  '5000mb-fiber': { marketPrice: 265, ourPrice: 245 }, // Internet 5000 (Fiber 5 GIG)
 };
 
 const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number }> = {
@@ -172,15 +172,15 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
     devicePayoff
   ]);
   
-  // Get display names
+  // Get display names based on AT&T current product naming
   const getInternetDisplayName = (type: InternetOption): string => {
     const speedMap: Record<InternetOption, string> = {
-      '10mb-copper': '10mb Copper Internet',
-      '50mb-copper': '50mb Copper Internet',
-      '300mb-fiber': '300mb Fiber Internet',
-      '1000mb-fiber': '1000mb Fiber Internet',
-      '3000mb-fiber': '3000mb Fiber Internet',
-      '5000mb-fiber': '5000mb Fiber Internet',
+      '10mb-copper': 'Copper Internet',
+      '50mb-copper': 'Copper Internet',
+      '300mb-fiber': 'Internet 300 (Fiber 300)',
+      '1000mb-fiber': 'Internet 1000 (Fiber 1 GIG)',
+      '3000mb-fiber': 'Internet 2000 (Fiber 2 GIG)',
+      '5000mb-fiber': 'Internet 5000 (Fiber 5 GIG)',
     };
     return speedMap[type];
   };

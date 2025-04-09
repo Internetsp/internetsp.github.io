@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calculator } from '@/components/business-savings/Calculator';
-import { IntroStep } from '@/components/business-savings/IntroStep';
-import { ContactForm } from '@/components/business-savings/ContactForm';
-import { QuoteSummary } from '@/components/business-savings/QuoteSummary';
+import { Calculator } from '../components/business-savings/Calculator';
+import { IntroStep } from '../components/business-savings/IntroStep';
+import { ContactForm } from '../components/business-savings/ContactForm';
+import { QuoteSummary } from '../components/business-savings/QuoteSummary';
 
 // Define types for our form data
 export type InternetOption = '10mb-copper' | '50mb-copper' | '300mb-fiber' | '1000mb-fiber' | '3000mb-fiber' | '5000mb-fiber';

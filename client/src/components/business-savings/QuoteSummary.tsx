@@ -18,17 +18,17 @@ export function QuoteSummary({ data }: QuoteSummaryProps) {
     }).format(amount);
   };
   
-  // Get display names for packages
+  // Get display names for packages based on AT&T current product naming
   const getInternetDisplayName = (type?: InternetOption): string => {
     if (!type) return 'None';
     
     const speedMap: Record<InternetOption, string> = {
-      '10mb-copper': '10 Mbps Copper',
-      '50mb-copper': '50 Mbps Copper',
-      '300mb-fiber': '300 Mbps Fiber',
-      '1000mb-fiber': '1 Gbps Fiber',
-      '3000mb-fiber': '3 Gbps Fiber',
-      '5000mb-fiber': '5 Gbps Fiber',
+      '10mb-copper': 'Copper Internet',
+      '50mb-copper': 'Copper Internet',
+      '300mb-fiber': 'Internet 300 (Fiber 300)',
+      '1000mb-fiber': 'Internet 1000 (Fiber 1 GIG)',
+      '3000mb-fiber': 'Internet 2000 (Fiber 2 GIG)',
+      '5000mb-fiber': 'Internet 5000 (Fiber 5 GIG)',
     };
     return speedMap[type];
   };
