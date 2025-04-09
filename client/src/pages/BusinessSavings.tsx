@@ -6,7 +6,7 @@ import { ContactForm } from '../components/business-savings/ContactForm';
 import { QuoteSummary } from '../components/business-savings/QuoteSummary';
 
 // Define types for our form data
-export type InternetOption = '10mb-copper' | '50mb-copper' | '300mb-fiber' | '1000mb-fiber' | '3000mb-fiber' | '5000mb-fiber';
+export type InternetOption = 'copper' | 'internet-300' | 'internet-500' | 'internet-1000' | 'internet-2000' | 'internet-5000';
 export type PhoneLineOption = 'personal-budget' | 'personal-standard' | 'personal-advanced';
 
 export interface DevicePayoff {

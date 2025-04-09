@@ -37,12 +37,12 @@ const getInternetDisplayName = (type?: InternetOption): string => {
   if (!type) return 'None';
   
   const speedMap: Record<InternetOption, string> = {
-    '10mb-copper': 'Copper Internet',
-    '50mb-copper': 'Copper Internet',
-    '300mb-fiber': 'Internet 300 (Fiber 300)',
-    '1000mb-fiber': 'Internet 1000 (Fiber 1 GIG)',
-    '3000mb-fiber': 'Internet 2000 (Fiber 2 GIG)',
-    '5000mb-fiber': 'Internet 5000 (Fiber 5 GIG)',
+    'copper': 'COPPER (768Kbps - 100Mbps)',
+    'internet-300': 'INTERNET 300 (FIBER 300)',
+    'internet-500': 'INTERNET 500 (FIBER 500)',
+    'internet-1000': 'INTERNET 1000 (FIBER 1 GIG)',
+    'internet-2000': 'INTERNET 2000 (FIBER 2 GIG)',
+    'internet-5000': 'INTERNET 5000 (FIBER 5 GIG)',
   };
   return speedMap[type];
 };

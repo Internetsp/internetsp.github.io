@@ -8,14 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { PlusIcon, MinusIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 import { BusinessSavingsFormData, InternetOption, PhoneLineOption, DevicePayoff } from '@/pages/BusinessSavings';
 
-// Pricing data based on AT&T current pricing
+// Pricing data based on AT&T current pricing document
 const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: number }> = {
-  '10mb-copper': { marketPrice: 80, ourPrice: 60 }, // Copper plan (averaged)
-  '50mb-copper': { marketPrice: 90, ourPrice: 60 }, // Copper plan
-  '300mb-fiber': { marketPrice: 75, ourPrice: 55 }, // Internet 300 (Fiber 300)
-  '1000mb-fiber': { marketPrice: 100, ourPrice: 80 }, // Internet 1000 (Fiber 1 GIG)
-  '3000mb-fiber': { marketPrice: 165, ourPrice: 145 }, // Internet 2000 (Fiber 2 GIG)
-  '5000mb-fiber': { marketPrice: 265, ourPrice: 245 }, // Internet 5000 (Fiber 5 GIG)
+  'copper': { marketPrice: 80, ourPrice: 60 }, // COPPER (768Kbps - 100Mbps)
+  'internet-300': { marketPrice: 75, ourPrice: 55 }, // Internet 300 (Fiber 300)
+  'internet-500': { marketPrice: 85, ourPrice: 65 }, // Internet 500 (Fiber 500)
+  'internet-1000': { marketPrice: 100, ourPrice: 80 }, // Internet 1000 (Fiber 1 GIG)
+  'internet-2000': { marketPrice: 165, ourPrice: 145 }, // Internet 2000 (Fiber 2 GIG)
+  'internet-5000': { marketPrice: 265, ourPrice: 245 }, // Internet 5000 (Fiber 5 GIG)
 };
 
 const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number }> = {
@@ -49,7 +49,7 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
   });
   
   const [internetType, setInternetType] = useState<InternetOption>(
-    (formData.internetPackage?.type as InternetOption) || '300mb-fiber'
+    (formData.internetPackage?.type as InternetOption) || 'internet-300'
   );
   
   const [internetQuantity, setInternetQuantity] = useState(
@@ -175,12 +175,12 @@ export function Calculator({ formData, onUpdate, onContinue, onBack }: Calculato
   // Get display names based on AT&T current product naming
   const getInternetDisplayName = (type: InternetOption): string => {
     const speedMap: Record<InternetOption, string> = {
-      '10mb-copper': 'Copper Internet',
-      '50mb-copper': 'Copper Internet',
-      '300mb-fiber': 'Internet 300 (Fiber 300)',
-      '1000mb-fiber': 'Internet 1000 (Fiber 1 GIG)',
-      '3000mb-fiber': 'Internet 2000 (Fiber 2 GIG)',
-      '5000mb-fiber': 'Internet 5000 (Fiber 5 GIG)',
+      'copper': 'COPPER (768Kbps - 100Mbps)',
+      'internet-300': 'INTERNET 300 (FIBER 300)',
+      'internet-500': 'INTERNET 500 (FIBER 500)',
+      'internet-1000': 'INTERNET 1000 (FIBER 1 GIG)',
+      'internet-2000': 'INTERNET 2000 (FIBER 2 GIG)',
+      'internet-5000': 'INTERNET 5000 (FIBER 5 GIG)',
     };
     return speedMap[type];
   };
