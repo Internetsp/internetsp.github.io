@@ -10,12 +10,11 @@ import { BusinessSavingsFormData, InternetOption, PhoneLineOption, DevicePayoff 
 
 // Pricing data based on AT&T current pricing document
 const internetPricing: Record<InternetOption, { marketPrice: number, ourPrice: number }> = {
-  'copper': { marketPrice: 80, ourPrice: 60 }, // COPPER (768Kbps - 100Mbps)
-  'internet-300': { marketPrice: 75, ourPrice: 30 }, // Internet 300 (Fiber 300)
-  'internet-500': { marketPrice: 85, ourPrice: 70 }, // Internet 500 (Fiber 500)
-  'internet-1000': { marketPrice: 100, ourPrice: 120 }, // Internet 1000 (Fiber 1 GIG)
-  'internet-2000': { marketPrice: 165, ourPrice: 145 }, // Internet 2000 (Fiber 2 GIG)
-  'internet-5000': { marketPrice: 265, ourPrice: 245 }, // Internet 5000 (Fiber 5 GIG)
+  'internet-300': { marketPrice: 70, ourPrice: 30 }, // Internet 300 (Fiber 300)
+  'internet-500': { marketPrice: 110, ourPrice: 70 }, // Internet 500 (Fiber 500)
+  'internet-1000': { marketPrice: 160, ourPrice: 120 }, // Internet 1000 (Fiber 1 GIG)
+  'internet-2000': { marketPrice: 185, ourPrice: 145 }, // Internet 2000 (Fiber 2 GIG)
+  'internet-5000': { marketPrice: 285, ourPrice: 245 }, // Internet 5000 (Fiber 5 GIG)
 };
 
 const phonePricing: Record<PhoneLineOption, { marketPrice: number, ourPrice: number, byodPrice: number }> = {

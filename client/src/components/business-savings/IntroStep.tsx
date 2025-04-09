@@ -10,12 +10,12 @@ export function IntroStep({ onContinue }: IntroStepProps) {
     <div className="flex flex-col md:flex-row">
       {/* Left side content */}
       <div className="md:w-1/2 pr-0 md:pr-6">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#0055CC] mb-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#0055CC] mb-4">
           Small Business Owners: Save Up To 70% On Communication Costs
         </h1>
         
-        <p className="text-lg mb-4">
-          While your competitors struggle with unreliable service and hidden fees, you'll enjoy premium communication at <span className="text-[#FF7A00] font-bold">a fraction of the cost</span>.
+        <p className="text-base mb-4">
+          Unlock unadvertised offers and enjoy premium communication at <span className="text-[#FF7A00] font-bold">a fraction of the cost</span>.
         </p>
         
         <div className="bg-gray-50 p-6 rounded-lg mb-6">
@@ -26,7 +26,7 @@ export function IntroStep({ onContinue }: IntroStepProps) {
           <ul className="space-y-4">
             <li className="flex items-center">
               <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
-              <span>Phone lines as low as <strong>$10/line</strong></span>
+              <span>Business phone lines as low as <strong>$10/line</strong></span>
             </li>
             <li className="flex items-center">
               <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
@@ -34,11 +34,11 @@ export function IntroStep({ onContinue }: IntroStepProps) {
             </li>
             <li className="flex items-center">
               <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
-              <span>Free upgrades to <strong>fastest internet</strong> options</span>
+              <span>Free upgrades to <strong>fiber internet</strong> options</span>
             </li>
             <li className="flex items-center">
               <Check className="h-5 w-5 text-[#0055CC] mr-2 flex-shrink-0" />
-              <span>Special pricing for <strong>both business and family</strong></span>
+              <span>Special pricing for <strong>both your business and family</strong></span>
             </li>
           </ul>
         </div>
@@ -75,7 +75,7 @@ export function IntroStep({ onContinue }: IntroStepProps) {
       
       {/* Right side - Feature Grid (visible only on desktop) */}
       <div className="hidden md:block md:w-1/2 bg-gradient-to-br from-[#0055CC] to-[#003C8F] rounded-lg p-6">
-        <h3 className="text-white text-2xl font-bold mb-6">Business Tech Solutions</h3>
+        <h3 className="text-white text-xl font-bold mb-6">Business Tech Solutions</h3>
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 flex flex-col items-center text-center">
             <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-3">
